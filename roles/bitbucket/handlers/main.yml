@@ -1,0 +1,5 @@
+---
+# Handler to handle bitbucket notification.
+
+- name: restart bitbucket
+  service: name=bitbucket state=restarted

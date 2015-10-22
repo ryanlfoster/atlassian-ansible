@@ -7,5 +7,5 @@ confluence_config: /etc/confluence
 confluence_home: /var/lib/confluence
 confluence_pass: Fuz1eewi
 confluence_sha256: b5d0a672ce98c44aaf400e006e80b9444b909366db2b929125bf6f0a18efbf1d
-confluence_url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.8.14.tar.gz
+confluence_url: https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-5.8.14.tar.gz
 confluence_user: confluence

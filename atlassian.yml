@@ -7,14 +7,5 @@
   roles:
     - common
 
-- name: install jira
-  hosts: jira_servers
-  remote_user: root
-  roles:
-    - jira
-
-- name: install confluence
-  hosts: confluence_servers
-  remote_user: root
-  roles:
-    - confluence
+- include: install_jira.yml
+- include: install_confluence.yml

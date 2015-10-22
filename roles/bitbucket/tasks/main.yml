@@ -1,0 +1,78 @@
+---
+# Install bitbucket
+
+- name: create system user
+  user:
+    name={{ bitbucket_user }}
+    password={{ bitbucket_pass }}
+    home={{ bitbucket_home }}
+    system=yes
+    shell=/bin/bash
+
+- name: preapre directories
+  file:
+    path={{ item }}
+    owner={{ bitbucket_user }}
+    group={{ bitbucket_user }}
+    state=directory
+  with_items:
+    - "{{ bitbucket_config }}"
+    - "{{ bitbucket_catalina }}"
+
+- name: copy init.d script
+  template:
+    src=bitbucket.j2
+    dest=/etc/init.d/bitbucket
+    owner={{ bitbucket_user }}
+    group={{ bitbucket_user }}
+    mode=0755
+
+- name: copy config files
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/bitbucket/{{ item }}"
+    owner={{ bitbucket_user }}
+    group={{ bitbucket_user }}
+    mode=0644
+  with_items:
+    - setenv.sh
+    - server.xml
+
+- name: download package
+  get_url:
+    url={{ bitbucket_url }}
+    dest={{ bitbucket_archive }}
+    sha256sum={{ bitbucket_sha256 }}
+
+- name: unarchive package
+  shell: tar zxvf {{ bitbucket_archive }} -C {{ bitbucket_catalina }} --strip-components=1; chown -Rf {{ bitbucket_user }}:{{ bitbucket_user }} {{ bitbucket_catalina }}
+  args:
+    creates: "{{ bitbucket_catalina }}/bin/start-bitbucket.sh"
+
+- name: relink setenv.sh
+  file:
+    src="{{ bitbucket_config }}/setenv.sh"
+    dest="{{ bitbucket_catalina }}/bin/setenv.sh"
+    state=link
+    force=yes
+
+- name: relink server.xml
+  file:
+    src="{{ bitbucket_config }}/server.xml"
+    dest="{{ bitbucket_catalina }}/conf/server.xml"
+    state=link
+    force=yes
+
+- name: create postgresql user
+  become: yes
+  become_user: postgres
+  postgresql_user: name={{ bitbucket_user }} password={{ bitbucket_pass }}
+
+- name: create postgresql db
+  become: yes
+  become_user: postgres
+  postgresql_db: name={{ bitbucket_user }} owner={{ bitbucket_user }} encoding=UNICODE lc_collate=C lc_ctype=C template=template0
+
+- name: enable service
+  service: name=bitbucket enabled=yes
+  notify: restart bitbucket
