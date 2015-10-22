@@ -1,12 +1,7 @@
 ---
 # This playbook deploys the whole application stack in this site.  
 
-- name: apply common configuration to all nodes
-  hosts: all
-  remote_user: root
-  roles:
-    - common
-
+- include: install_common.yml
 - include: install_crowd.yml
 - include: install_jira.yml
 - include: install_confluence.yml
