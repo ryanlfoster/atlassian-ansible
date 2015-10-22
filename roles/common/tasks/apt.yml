@@ -1,0 +1,52 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: add-apt-repository ppa:webupd8team/java
+  apt_repository: repo=ppa:webupd8team/java
+
+- name: Automated installation (auto accept license)
+  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
+- name: apt-get update
+  apt: update_cache=yes
+
+- name: apt-get dist-upgrade
+  apt: upgrade=dist
+
+- name: apt-get install
+  apt: name={{ item }} state=latest
+  with_items:
+    - bmon
+    - bsd-mailx
+    - colordiff
+    - git
+    - git-flow
+    - htop
+    - linux-generic-lts-vivid
+    - mutt
+    - nmap
+    - ntp
+    - openssh-server
+    - oracle-java8-installer
+    - oracle-java8-set-default
+    - postfix
+    - postgresql
+    - procmail
+    - pwgen
+    - python
+    - python-psycopg2
+    - sshfs
+    - ssl-cert
+    - vim
+  notify:
+    - restart postgresql
+
+- name: apt-get purge
+  apt: name={{ item }} state=absent purge=yes
+  with_items:
+    - linux-*-3.13.*-*
+    - linux-*-3.16.*-*
+    - linux-*-lts-trusty
+    - linux-*-lts-utopic
+    - linux-generic
+    - linux-virtual
