@@ -37,7 +37,6 @@
   with_items:
     - setenv.sh
     - server.xml
-    - dbconfig.xml
 
 - name: download package
   get_url:
@@ -61,13 +60,6 @@
   file:
     src="{{ jira_config }}/server.xml"
     dest="{{ jira_catalina }}/conf/server.xml"
-    state=link
-    force=yes
-
-- name: relink dbconfig.xml
-  file:
-    src="{{ jira_config }}/dbconfig.xml"
-    dest="{{ jira_home }}/dbconfig.xml"
     state=link
     force=yes
 

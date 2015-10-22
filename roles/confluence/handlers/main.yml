@@ -1,0 +1,5 @@
+---
+# Handler to handle confluence notification.
+
+- name: restart confluence
+  service: name=confluence state=restarted

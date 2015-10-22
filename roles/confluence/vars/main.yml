@@ -1,0 +1,11 @@
+---
+# The variables file used by the playbooks in the confluence_servers group.
+
+confluence_archive: /tmp/confluence.tar.gz
+confluence_catalina: /usr/share/confluence
+confluence_config: /etc/confluence
+confluence_home: /var/lib/confluence
+confluence_pass: Fuz1eewi
+confluence_sha256: b5d0a672ce98c44aaf400e006e80b9444b909366db2b929125bf6f0a18efbf1d
+confluence_url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.8.14.tar.gz
+confluence_user: confluence
