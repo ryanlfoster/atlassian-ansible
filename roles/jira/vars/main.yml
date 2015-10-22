@@ -6,6 +6,6 @@ jira_catalina: /usr/share/jira
 jira_config: /etc/jira
 jira_home: /var/lib/jira
 jira_pass: Zaj9ooZ5
-jira_sha256: 2eb0aff3e71272dc0fd3d9d6894f219f92033d004e46b25b542241151a732817
-jira_url: https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.0.0-jira-7.0.0.tar.gz
+jira_sha256: a77cf4c646d3f49d3823a5739daea0827adad1254dae1d1677c629e512a7afd4
+jira_url: https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.4.12.tar.gz
 jira_user: jira
