@@ -1,0 +1,20 @@
+---
+# Install jira
+
+- name: create system user
+  user:
+    name={{ jira_user }}
+    password={{ jira_pass }}
+    home={{ jira_home }}
+    system=yes
+    shell=/bin/bash
+
+- name: preapre directories
+  file:
+    path={{ item }}
+    owner={{ jira_user }}
+    group={{ jira_user }}
+    state=directory
+  with_items:
+    - "{{ jira_config }}"
+    - "{{ jira_catalina }}"

@@ -1,0 +1,9 @@
+---
+# The variables file used by the playbooks in the jira_servers group.
+
+jira_catalina: /usr/share/jira
+jira_config: /etc/jira
+jira_home: /var/lib/jira
+jira_pass: Zaj9ooZ5
+jira_url: https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.0.0-jira-7.0.0.tar.gz
+jira_user: jira
