@@ -1,0 +1,5 @@
+---
+# Handler to handle crowd notification.
+
+- name: restart crowd
+  service: name=crowd state=restarted

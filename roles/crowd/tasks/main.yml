@@ -1,0 +1,78 @@
+---
+# Install crowd
+
+- name: create system user
+  user:
+    name={{ crowd_user }}
+    password={{ crowd_pass }}
+    home={{ crowd_home }}
+    system=yes
+    shell=/bin/bash
+
+- name: preapre directories
+  file:
+    path={{ item }}
+    owner={{ crowd_user }}
+    group={{ crowd_user }}
+    state=directory
+  with_items:
+    - "{{ crowd_config }}"
+    - "{{ crowd_catalina }}"
+
+- name: copy init.d script
+  template:
+    src=crowd.j2
+    dest=/etc/init.d/crowd
+    owner={{ crowd_user }}
+    group={{ crowd_user }}
+    mode=0755
+
+- name: copy config files
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/crowd/{{ item }}"
+    owner={{ crowd_user }}
+    group={{ crowd_user }}
+    mode=0644
+  with_items:
+    - setenv.sh
+    - server.xml
+
+- name: download package
+  get_url:
+    url={{ crowd_url }}
+    dest={{ crowd_archive }}
+    sha256sum={{ crowd_sha256 }}
+
+- name: unarchive package
+  shell: tar zxvf {{ crowd_archive }} -C {{ crowd_catalina }} --strip-components=1; chown -Rf {{ crowd_user }}:{{ crowd_user }} {{ crowd_catalina }}
+  args:
+    creates: "{{ crowd_catalina }}/start_crowd.sh"
+
+- name: relink setenv.sh
+  file:
+    src="{{ crowd_config }}/setenv.sh"
+    dest="{{ crowd_catalina }}/apache-tomcat/bin/setenv.sh"
+    state=link
+    force=yes
+
+- name: relink server.xml
+  file:
+    src="{{ crowd_config }}/server.xml"
+    dest="{{ crowd_catalina }}/apache-tomcat/conf/server.xml"
+    state=link
+    force=yes
+
+- name: create postgresql user
+  become: yes
+  become_user: postgres
+  postgresql_user: name={{ crowd_user }} password={{ crowd_pass }}
+
+- name: create postgresql db
+  become: yes
+  become_user: postgres
+  postgresql_db: name={{ crowd_user }} owner={{ crowd_user }} encoding=UNICODE lc_collate=C lc_ctype=C template=template0
+
+- name: enable service
+  service: name=crowd enabled=yes
+  notify: restart crowd

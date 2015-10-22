@@ -1,0 +1,11 @@
+---
+# The variables file used by the playbooks in the crowd_servers group.
+
+crowd_archive: /tmp/crowd.tar.gz
+crowd_catalina: /usr/share/crowd
+crowd_config: /etc/crowd
+crowd_home: /var/lib/crowd
+crowd_pass: Shoux3ja
+crowd_sha256: dabfde01366c1f72d50440e69d38a3a2a5092a4cba525b3987af8d53b11a402c
+crowd_url: https://downloads.atlassian.com/software/crowd/downloads/atlassian-crowd-2.8.3.tar.gz
+crowd_user: crowd

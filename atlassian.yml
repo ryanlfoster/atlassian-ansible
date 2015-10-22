@@ -7,5 +7,7 @@
   roles:
     - common
 
+- include: install_crowd.yml
 - include: install_jira.yml
 - include: install_confluence.yml
+- include: install_bitbucket.yml
