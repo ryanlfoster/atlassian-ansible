@@ -27,7 +27,7 @@
     group={{ jira_user }}
     mode=0755
 
-- name: copy setenv.sh
+- name: copy config files
   template:
     src="{{ item }}.j2"
     dest="/etc/jira/{{ item }}"
@@ -38,3 +38,35 @@
     - setenv.sh
     - server.xml
     - dbconfig.xml
+
+- name: download package
+  get_url:
+    url={{ jira_url }}
+    dest={{ jira_archive }}
+    sha256sum={{ jira_sha256 }}
+
+- name: unarchive package
+  shell: tar zxvf {{ jira_archive }} -C {{ jira_catalina }} --strip-components=1; chown -Rf {{ jira_user }}:{{ jira_user }} {{ jira_catalina }}
+  args:
+    creates: "{{ jira_catalina }}/bin/start-jira.sh"
+
+- name: relink setenv.sh
+  file:
+    src="{{ jira_config }}/setenv.sh"
+    dest="{{ jira_catalina }}/bin/setenv.sh"
+    state=link
+    force=yes
+
+- name: relink server.xml
+  file:
+    src="{{ jira_config }}/server.xml"
+    dest="{{ jira_catalina }}/conf/server.xml"
+    state=link
+    force=yes
+
+- name: relink dbconfig.xml
+  file:
+    src="{{ jira_config }}/dbconfig.xml"
+    dest="{{ jira_home }}/dbconfig.xml"
+    state=link
+    force=yes
