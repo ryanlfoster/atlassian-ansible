@@ -18,3 +18,11 @@
   with_items:
     - "{{ jira_config }}"
     - "{{ jira_catalina }}"
+
+- name: copy init.d script
+  template:
+    src=etc/init.d/jira.j2
+    dest=/etc/init.d/jira
+    owner={{ jira_user }}
+    group={{ jira_user }}
+    mode=0755
