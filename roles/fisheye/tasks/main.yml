@@ -1,0 +1,72 @@
+---
+# Install fisheye
+
+- name: create system user
+  user:
+    name={{ fisheye_user }}
+    password={{ fisheye_pass }}
+    home={{ fisheye_home }}
+    system=yes
+    shell=/bin/bash
+
+- name: preapre directories
+  file:
+    path={{ item }}
+    owner={{ fisheye_user }}
+    group={{ fisheye_user }}
+    state=directory
+  with_items:
+    - "{{ fisheye_config }}"
+    - "{{ fisheye_catalina }}"
+
+- name: copy init.d script
+  template:
+    src=fisheye.j2
+    dest=/etc/init.d/fisheye
+    owner={{ fisheye_user }}
+    group={{ fisheye_user }}
+    mode=0755
+
+- name: copy config files
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/fisheye/{{ item }}"
+    owner={{ fisheye_user }}
+    group={{ fisheye_user }}
+    mode=0755
+  with_items:
+    - fisheyectl.sh
+
+- name: download package
+  get_url:
+    url={{ fisheye_url }}
+    dest={{ fisheye_archive }}
+    sha256sum={{ fisheye_sha256 }}
+
+- name: unarchive package
+  shell: TMP_DIR=`mktemp -d`; unzip {{ fisheye_archive }} -x -d $TMP_DIR; rsync -av $TMP_DIR/*/ {{ fisheye_catalina }}; chown -Rf {{ fisheye_user }}:{{ fisheye_user }} {{ fisheye_catalina }}
+  args:
+    creates: "{{ fisheye_catalina }}/bin/start.sh"
+
+- name: relink fisheyectl.sh
+  file:
+    src="{{ fisheye_config }}/fisheyectl.sh"
+    dest="{{ fisheye_catalina }}/bin/fisheyectl.sh"
+    owner={{ fisheye_user }}
+    group={{ fisheye_user }}
+    state=link
+    force=yes
+
+- name: create postgresql user
+  become: yes
+  become_user: postgres
+  postgresql_user: name={{ fisheye_user }} password={{ fisheye_pass }}
+
+- name: create postgresql db
+  become: yes
+  become_user: postgres
+  postgresql_db: name={{ fisheye_user }} owner={{ fisheye_user }} encoding=UNICODE lc_collate=C lc_ctype=C template=template0
+
+- name: enable service
+  service: name=fisheye enabled=yes
+  notify: restart fisheye

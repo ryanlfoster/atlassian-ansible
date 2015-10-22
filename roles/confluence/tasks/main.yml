@@ -53,6 +53,8 @@
   file:
     src="{{ confluence_config }}/setenv.sh"
     dest="{{ confluence_catalina }}/bin/setenv.sh"
+    owner={{ confluence_user }}
+    group={{ confluence_user }}
     state=link
     force=yes
 
@@ -60,6 +62,8 @@
   file:
     src="{{ confluence_config }}/server.xml"
     dest="{{ confluence_catalina }}/conf/server.xml"
+    owner={{ confluence_user }}
+    group={{ confluence_user }}
     state=link
     force=yes
 

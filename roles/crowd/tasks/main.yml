@@ -53,6 +53,8 @@
   file:
     src="{{ crowd_config }}/setenv.sh"
     dest="{{ crowd_catalina }}/apache-tomcat/bin/setenv.sh"
+    owner={{ crowd_user }}
+    group={{ crowd_user }}
     state=link
     force=yes
 
@@ -60,6 +62,8 @@
   file:
     src="{{ crowd_config }}/server.xml"
     dest="{{ crowd_catalina }}/apache-tomcat/conf/server.xml"
+    owner={{ crowd_user }}
+    group={{ crowd_user }}
     state=link
     force=yes
 

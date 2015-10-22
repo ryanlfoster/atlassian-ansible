@@ -12,3 +12,4 @@
 - include: install_confluence.yml
 - include: install_bitbucket.yml
 - include: install_bamboo.yml
+- include: install_fisheye.yml

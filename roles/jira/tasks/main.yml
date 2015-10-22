@@ -53,6 +53,8 @@
   file:
     src="{{ jira_config }}/setenv.sh"
     dest="{{ jira_catalina }}/bin/setenv.sh"
+    owner={{ jira_user }}
+    group={{ jira_user }}
     state=link
     force=yes
 
@@ -60,6 +62,8 @@
   file:
     src="{{ jira_config }}/server.xml"
     dest="{{ jira_catalina }}/conf/server.xml"
+    owner={{ jira_user }}
+    group={{ jira_user }}
     state=link
     force=yes
 

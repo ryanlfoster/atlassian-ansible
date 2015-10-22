@@ -1,0 +1,11 @@
+---
+# The variables file used by the playbooks in the fisheye_servers group.
+
+fisheye_archive: /tmp/fisheye.zip
+fisheye_catalina: /usr/share/fisheye
+fisheye_config: /etc/fisheye
+fisheye_home: /var/lib/fisheye
+fisheye_pass: uoD9iada
+fisheye_sha256: 06e6403d905126061f07b9e7e9528db4bca82109ca2658f908a693735dc67706
+fisheye_url: https://downloads.atlassian.com/software/fisheye/downloads/fisheye-3.9.1.zip
+fisheye_user: fisheye

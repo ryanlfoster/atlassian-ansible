@@ -53,6 +53,8 @@
   file:
     src="{{ bitbucket_config }}/setenv.sh"
     dest="{{ bitbucket_catalina }}/bin/setenv.sh"
+    owner={{ bitbucket_user }}
+    group={{ bitbucket_user }}
     state=link
     force=yes
 
@@ -60,6 +62,8 @@
   file:
     src="{{ bitbucket_config }}/server.xml"
     dest="{{ bitbucket_catalina }}/conf/server.xml"
+    owner={{ bitbucket_user }}
+    group={{ bitbucket_user }}
     state=link
     force=yes
 

@@ -37,6 +37,7 @@
     - python-psycopg2
     - sshfs
     - ssl-cert
+    - unzip
     - vim
   notify: restart postgresql
 

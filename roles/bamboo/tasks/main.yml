@@ -53,6 +53,8 @@
   file:
     src="{{ bamboo_config }}/setenv.sh"
     dest="{{ bamboo_catalina }}/bin/setenv.sh"
+    owner={{ bamboo_user }}
+    group={{ bamboo_user }}
     state=link
     force=yes
 
@@ -60,6 +62,8 @@
   file:
     src="{{ bamboo_config }}/server.xml"
     dest="{{ bamboo_catalina }}/conf/server.xml"
+    owner={{ bamboo_user }}
+    group={{ bamboo_user }}
     state=link
     force=yes
 
