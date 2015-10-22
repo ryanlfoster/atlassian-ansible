@@ -1,0 +1,5 @@
+---
+# Handler to handle bamboo notification.
+
+- name: restart bamboo
+  service: name=bamboo state=restarted

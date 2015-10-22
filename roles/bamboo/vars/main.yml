@@ -1,0 +1,11 @@
+---
+# The variables file used by the playbooks in the bamboo_servers group.
+
+bamboo_archive: /tmp/bamboo.tar.gz
+bamboo_catalina: /usr/share/bamboo
+bamboo_config: /etc/bamboo
+bamboo_home: /var/lib/bamboo
+bamboo_pass: Uudie2fu
+bamboo_sha256: 4efd7ed85e1b0886ff262ed388aa9049651b2bccffa60bdc59db73fb1609982f
+bamboo_url: https://downloads.atlassian.com/software/bamboo/downloads/atlassian-bamboo-5.9.7.tar.gz
+bamboo_user: bamboo

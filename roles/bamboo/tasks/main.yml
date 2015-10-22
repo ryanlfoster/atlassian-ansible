@@ -1,0 +1,78 @@
+---
+# Install bamboo
+
+- name: create system user
+  user:
+    name={{ bamboo_user }}
+    password={{ bamboo_pass }}
+    home={{ bamboo_home }}
+    system=yes
+    shell=/bin/bash
+
+- name: preapre directories
+  file:
+    path={{ item }}
+    owner={{ bamboo_user }}
+    group={{ bamboo_user }}
+    state=directory
+  with_items:
+    - "{{ bamboo_config }}"
+    - "{{ bamboo_catalina }}"
+
+- name: copy init.d script
+  template:
+    src=bamboo.j2
+    dest=/etc/init.d/bamboo
+    owner={{ bamboo_user }}
+    group={{ bamboo_user }}
+    mode=0755
+
+- name: copy config files
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/bamboo/{{ item }}"
+    owner={{ bamboo_user }}
+    group={{ bamboo_user }}
+    mode=0644
+  with_items:
+    - setenv.sh
+    - server.xml
+
+- name: download package
+  get_url:
+    url={{ bamboo_url }}
+    dest={{ bamboo_archive }}
+    sha256sum={{ bamboo_sha256 }}
+
+- name: unarchive package
+  shell: tar zxvf {{ bamboo_archive }} -C {{ bamboo_catalina }} --strip-components=1; chown -Rf {{ bamboo_user }}:{{ bamboo_user }} {{ bamboo_catalina }}
+  args:
+    creates: "{{ bamboo_catalina }}/bin/start-bamboo.sh"
+
+- name: relink setenv.sh
+  file:
+    src="{{ bamboo_config }}/setenv.sh"
+    dest="{{ bamboo_catalina }}/bin/setenv.sh"
+    state=link
+    force=yes
+
+- name: relink server.xml
+  file:
+    src="{{ bamboo_config }}/server.xml"
+    dest="{{ bamboo_catalina }}/conf/server.xml"
+    state=link
+    force=yes
+
+- name: create postgresql user
+  become: yes
+  become_user: postgres
+  postgresql_user: name={{ bamboo_user }} password={{ bamboo_pass }}
+
+- name: create postgresql db
+  become: yes
+  become_user: postgres
+  postgresql_db: name={{ bamboo_user }} owner={{ bamboo_user }} encoding=UNICODE lc_collate=C lc_ctype=C template=template0
+
+- name: enable service
+  service: name=bamboo enabled=yes
+  notify: restart bamboo

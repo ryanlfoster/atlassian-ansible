@@ -11,3 +11,4 @@
 - include: install_jira.yml
 - include: install_confluence.yml
 - include: install_bitbucket.yml
+- include: install_bamboo.yml
