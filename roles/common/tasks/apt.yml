@@ -3,9 +3,7 @@
 
 - name: add-apt-repository ppa:webupd8team/java
   apt_repository: repo=ppa:webupd8team/java
-
-- name: Automated installation (auto accept license)
-  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+  notify: auto accept license
 
 - name: apt-get update
   apt: update_cache=yes
@@ -38,8 +36,7 @@
     - sshfs
     - ssl-cert
     - vim
-  notify:
-    - restart postgresql
+  notify: restart postgresql
 
 - name: apt-get purge
   apt: name={{ item }} state=absent purge=yes

@@ -1,0 +1,5 @@
+---
+# Handler to handle jira notification.
+
+- name: restart jira
+  service: name=jira state=restarted
